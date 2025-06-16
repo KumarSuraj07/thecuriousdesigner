@@ -12,6 +12,25 @@ const messages = [
 
 let currentMessageIndex = 0;
 
+// Only show boy character on home section
+const showBoyOnHome = () => {
+    const homeSection = document.getElementById('home');
+    const rect = homeSection.getBoundingClientRect();
+    
+    if (rect.top <= 0 && rect.bottom >= window.innerHeight / 2) {
+        boyCharacter.style.opacity = '1';
+        boyCharacter.style.pointerEvents = 'auto';
+    } else {
+        boyCharacter.style.opacity = '0';
+        boyCharacter.style.pointerEvents = 'none';
+    }
+};
+
+// Check on scroll
+window.addEventListener('scroll', showBoyOnHome);
+// Check on initial load
+document.addEventListener('DOMContentLoaded', showBoyOnHome);
+
 boyCharacter.addEventListener('click', () => {
     currentMessageIndex = (currentMessageIndex + 1) % messages.length;
     
@@ -28,26 +47,6 @@ boyCharacter.addEventListener('click', () => {
     setTimeout(() => {
         boyCharacter.style.transform = 'scale(1)';
     }, 150);
-});
-
-// Hide boy character when scrolling down, show when scrolling up
-let lastScrollPosition = window.pageYOffset;
-let isHidden = false;
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-    
-    if (currentScroll > lastScrollPosition && !isHidden && currentScroll > 200) {
-        // Scrolling down - hide the boy
-        boyCharacter.style.transform = 'translateX(-150px)';
-        isHidden = true;
-    } else if (currentScroll < lastScrollPosition && isHidden) {
-        // Scrolling up - show the boy
-        boyCharacter.style.transform = 'translateX(0)';
-        isHidden = false;
-    }
-    
-    lastScrollPosition = currentScroll;
 });
 
 // Smooth scroll for navigation links
@@ -78,33 +77,70 @@ window.addEventListener('scroll', () => {
 
 // Animate elements when they come into view
 const animateOnScroll = () => {
-    const elements = document.querySelectorAll('.portfolio-item, .service-card, .skill');
+    const elements = document.querySelectorAll('.animate-on-scroll');
     
     elements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
-        const elementBottom = element.getBoundingClientRect().bottom;
+        const triggerPoint = window.innerHeight * 0.8;
         
-        if (elementTop < window.innerHeight && elementBottom > 0) {
-            element.style.opacity = '1';
-            element.style.transform = 'translateY(0)';
+        if (elementTop < triggerPoint) {
+            element.classList.add('animated');
+        } else {
+            // Remove animation class when element is out of view (for re-animation when scrolling back up)
+            element.classList.remove('animated');
         }
     });
 };
 
 // Initial setup for scroll animations
 document.addEventListener('DOMContentLoaded', () => {
-    const elements = document.querySelectorAll('.portfolio-item, .service-card, .skill');
-    
-    elements.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(20px)';
-        element.style.transition = 'all 0.6s ease-out';
+    // Ensure boy character is always visible on all sections
+    document.addEventListener('DOMContentLoaded', () => {
+        // Make sure boy character is visible
+        const boyCharacter = document.querySelector('.boy-character');
+        boyCharacter.style.transform = 'translateX(0)';
     });
     
+    // Add animation class to components
+    const componentsToAnimate = [
+        '.about h2', 
+        '.about p', 
+        '.tool-card', 
+        '.portfolio h2', 
+        '.portfolio-item', 
+        '.services h2', 
+        '.service-card', 
+        '.contact h2', 
+        '.contact-form', 
+        '.info-item'
+    ];
+    
+    componentsToAnimate.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach((element, index) => {
+            // For grid items, calculate delay based on position
+            let delay = 0;
+            if (selector === '.tool-card' || selector === '.portfolio-item' || selector === '.service-card') {
+                // Calculate row and column for grid items
+                const parent = element.parentElement;
+                const siblings = Array.from(parent.children);
+                const position = siblings.indexOf(element);
+                delay = position * 0.1;
+            } else {
+                delay = index * 0.1;
+            }
+            
+            element.classList.add('animate-on-scroll');
+            element.style.transitionDelay = `${delay}s`;
+        });
+    });
+    
+    // Run initial animation check
     animateOnScroll();
 });
 
 window.addEventListener('scroll', animateOnScroll);
+window.addEventListener('resize', animateOnScroll);
 
 // Form submission handling
 const contactForm = document.querySelector('.contact-form');
