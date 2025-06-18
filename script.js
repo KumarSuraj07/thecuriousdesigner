@@ -108,6 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
         '.tool-card', 
         '.portfolio h2', 
         '.portfolio-item', 
+        '.videos h2',
+        '.video-item',
         '.services h2', 
         '.service-card', 
         '.contact h2', 
@@ -184,7 +186,7 @@ if (aboutSection) {
                 observer.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 1.5 });
     
     observer.observe(aboutSection);
 }

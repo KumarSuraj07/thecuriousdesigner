@@ -327,6 +327,7 @@ body {
     color: var(--primary-color);
     position: relative;
     z-index: 2;
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .tool-card p {
@@ -337,15 +338,11 @@ body {
     z-index: 2;
 }
 
-@keyframes cardPulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
+/* Removed cardPulse animation */
 
 .tool-card:hover h3 {
     color: var(--primary-color);
-    animation: cardPulse 1s ease infinite;
+    transform: scale(1.05);
 }
 
 /* Portfolio Section */
@@ -417,6 +414,100 @@ body {
 
 .overlay p {
     color: rgba(255, 255, 255, 0.8);
+}
+
+/* Videos Section */
+.videos {
+    padding: 100px 5%;
+    background: var(--background-color);
+}
+
+.videos h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+    color: white;
+}
+
+.videos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.video-item {
+    background: var(--card-background);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+.video-item:hover {
+    transform: translateY(-10px) translateZ(20px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.video-item h3 {
+    padding: 1rem 1.5rem 0.5rem;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    position: relative;
+    z-index: 2;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.video-item p {
+    padding: 0 1.5rem 1.5rem;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    opacity: 0.8;
+    position: relative;
+    z-index: 2;
+}
+
+.video-item:hover h3 {
+    color: var(--primary-color);
+    transform: scale(1.05);
+}
+
+.video-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.video-item:hover::before {
+    opacity: 0.1;
 }
 
 /* Services Section */
